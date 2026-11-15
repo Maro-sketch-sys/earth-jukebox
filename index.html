@@ -12,7 +12,7 @@ body.big{--fs:1.2rem}body.contrast{--char:#000;--off:#fff;--gray:#777}
 a{color:var(--blue)}.skip{position:absolute;left:-999px}.skip:focus{left:8px;top:8px;background:#fff;padding:8px;z-index:99}
 header.top{background:var(--navy);color:#fff;display:flex;flex-wrap:wrap;align-items:center;gap:8px 28px;padding:12px 5vw}
 .brand{font-weight:700;font-size:1.15rem;letter-spacing:.02em;color:#fff;text-decoration:none}
-nav{display:flex;gap:4px;flex:1}nav a{color:#cfe3f3;text-decoration:none;padding:6px 12px;border-bottom:2px solid transparent}
+nav{display:flex;flex-wrap:wrap;gap:0 4px;flex:1 1 100%}@media(min-width:62rem){nav{flex:1}}nav a{color:#cfe3f3;text-decoration:none;padding:6px 12px;border-bottom:2px solid transparent}
 nav a[aria-current=page]{color:#fff;border-color:var(--cyan)}
 .tools button{background:none;border:1px solid #476a8a;color:#fff;border-radius:4px;padding:4px 10px;margin-left:6px;cursor:pointer}
 .tools button[aria-pressed=true]{background:var(--cyan);color:var(--navy)}
@@ -61,13 +61,18 @@ table{border-collapse:collapse;font-size:.8rem}td,th{border:1px solid #2a5275;pa
 .kfb{min-height:3.2em;font-size:1.05rem;margin:8px 0;padding:10px 14px;border-left:4px solid var(--cyan);background:#fff}
 .kbar{height:10px;background:var(--gray);border-radius:5px;max-width:36rem}.kbar i{display:block;height:100%;background:var(--green);border-radius:5px}
 .kmain{background:#fff;padding:24px;border:1px solid var(--gray);border-radius:6px}
-</style>
+.sl a.row{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:28px;align-items:center;text-decoration:none;color:var(--char);padding:26px 0;border-top:1px solid #c9ced4}
+.sl a.row:nth-child(even) img{order:2}.sl img{width:100%;aspect-ratio:16/9;object-fit:cover;background:#000}.sl h2{font-size:1.8rem;margin:0 0 6px;color:var(--navy)}.sl a.row:hover h2{text-decoration:underline}
+.sd{max-width:46rem;margin:auto;padding:36px 5vw 64px}.sd h1{font-size:clamp(2rem,5vw,3.2rem);color:var(--navy)}.sd h2{font-size:1.3rem;margin-top:1.8em;color:var(--blue)}.dek{font-size:1.2rem;color:#44505c}
+.sp{background:#08141F;color:#dbe7f1;padding:14px;margin:22px 0;border-radius:4px}.sp .ctl{margin-top:8px}
+@media(max-width:44rem){.sl a.row{grid-template-columns:1fr}.sl a.row:nth-child(even) img{order:0}}
+h1[tabindex="-1"]:focus,h2[tabindex="-1"]:focus{outline:none}</style>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
 <header class="top">
  <a class="brand" href="#home">EARTH JUKEBOX</a>
- <nav aria-label="Main"><a href="#home" data-r="home">Home</a><a href="#studio" data-r="studio">Jukebox Studio</a><a href="#kids" data-r="kids">Kids Learning</a><a href="#about" data-r="about">About</a></nav>
+ <nav aria-label="Main"><a href="#home" data-r="home">Home</a><a href="#studio" data-r="studio">Jukebox Studio</a><a href="#stories" data-r="stories">Earth Stories</a><a href="#kids" data-r="kids">Kids Learning</a><a href="#about" data-r="about">About</a></nav>
  <div class="tools"><button id="bigf" aria-pressed="false" title="Larger text">A+</button><button id="hic" aria-pressed="false" title="High contrast">Contrast</button></div>
 </header>
 <main id="main" tabindex="-1"></main>
@@ -207,6 +212,42 @@ function kids(){let v="dash",qs=[],i=0,sc=0,miss=[],cat="mixed",lv=0,L=null,G=nu
    $("#kfb").textContent=(ok?pick(KF.ok):"Not quite! Let's think again.")+" This one "+(it[1]?"helps":"harms")+" the planet.";$("#kn").hidden=false;$("#kn").focus()});
   if(v==="game"&&$("#kn"))$("#kn").onclick=()=>{G.i++;if(G.i>=G.items.length){const p=KP.get();p.games=(p.games||0)+1;KP.set(p)}draw()}};
  draw()}
+/* ---------- Earth Stories ---------- */
+const STORIES=[
+{id:"warming",ds:"temperature",t:"The Warming Planet",dek:"Where the heat sits on a summer day, and what it means for our climate.",
+ intro:"Earth's average surface temperature has risen by more than 1 °C since the late 1800s, mostly because people release heat-trapping gases such as carbon dioxide. This map is different: it shows near-surface air temperature from a NASA computer model on a single day, 15 August 2023.",
+ ctx:"Weather is what happens on one day. Climate is the pattern over decades. A one-day map cannot show a trend, but it shows the geography of heat: where the air is warm and where it is cold.",
+ obs:["Warm colours gather in the tropics and subtropics, where the Sun is strongest.","Cold colours gather toward the poles.","Mountain ranges show up as cooler streaks, because air cools as it rises."]},
+{id:"oceans",ds:"sst",t:"The Changing Oceans",dek:"The ocean soaks up most of the extra heat. Hear how warm and cold water are spread.",
+ intro:"By most estimates the ocean absorbs more than 90% of the extra heat trapped by greenhouse gases. That makes sea surface temperature one of the most watched numbers in Earth science. This map shows 4 July 2023.",
+ ctx:"Sea surface temperature is the temperature of the ocean's top layer. The MUR product combines observations from several satellites into one smooth, detailed map.",
+ obs:["The warmest water sits near the equator.","Cold water hugs the polar regions.","Warm surface water can fuel hurricanes, which is why scientists track it closely."]},
+{id:"ice",ds:"ice",t:"The Disappearing Ice",dek:"Antarctica's white edge, from the winter ice to the open sea.",
+ intro:"Antarctica is a frozen continent ringed by floating sea ice. The sea ice grows around it in the southern winter and shrinks in summer. Scientists watch it because ice reflects sunlight and shapes ocean and weather patterns.",
+ ctx:"Floating sea ice does not raise sea level when it melts. Ice sheets on land are different: when they melt or slide into the sea they add new water. Antarctica's ice sheet holds enough water to raise global sea level by tens of metres if it all melted.",
+ obs:["Bright white areas are ice. Darker areas are open water or bare surfaces.","The ice edge is ragged, shaped by winds and currents.","Brighter places make higher notes in this story."]},
+{id:"forests",ds:"forest",t:"The Living Forests",dek:"Green canopy seen from space, and a lesson in laser measurement.",
+ intro:"Forests store carbon and shelter much of the world's wildlife. NASA's GEDI instrument, on the International Space Station, uses laser pulses to measure the height and structure of forests.",
+ ctx:"This image is a rendered view of the globe, so the sound follows green tones in the picture, not measured canopy height. About half the columns hold usable green land. The gaps are filled by interpolation.",
+ obs:["The sweep crosses one side of the globe, from left to right.","Green marks vegetation. Ocean and black space are ignored.","Greener places make higher notes."]},
+{id:"atmosphere",ds:"co",t:"Earth's Atmosphere",dek:"Gases ride the wind. Listen to how a model sees the air.",
+ intro:"Gases in the air move with the wind. Carbon monoxide, released by fires and fuel burning, is a useful tracer that shows how pollution travels around the planet.",
+ ctx:"This map comes from a NASA atmosphere model (GMAO) on 15 August 2023. The sound follows the picture's brightness, which is relative to this image only. Check the original NASA legend for real values.",
+ obs:["In maps like this, plumes of gas are carried downwind from where they are released.","Large areas can look alike, so listening for changes helps you notice patterns."]}];
+function stories(id){const M=$("#main"),S=STORIES.find(x=>x.id===id);
+ if(!S){M.innerHTML=`<div class="wrap sl" style="max-width:62rem"><h1 id="kh" tabindex="-1">Earth Stories</h1><p style="max-width:40rem">Five stories from NASA Earth observations. Each one has a map you can hear.</p>${STORIES.map(s=>`<a class="row" href="#stories/${s.id}"><img src="${IMG(SETS.find(d=>d.id===s.ds).id)}" alt="" loading="lazy"><div><h2>${s.t}</h2><p>${s.dek}</p></div></a>`).join("")}</div>`;$("#kh").focus({preventScroll:true});return}
+ const d=SETS.find(x=>x.id===S.ds),n=STORIES.indexOf(S),nx=STORIES[(n+1)%STORIES.length];Eng.set=d;Eng.pos=0;
+ M.innerHTML=`<article class="sd"><p><a href="#stories">All stories</a></p><h1 id="kh" tabindex="-1">${S.t}</h1><p class="dek">${S.dek}</p>
+ <div class="sp"><span class="badge">Image-derived sonification: estimated from a rendered NASA image, not original measurements</span><div class="stage"><img src="${IMG(d.id)}" alt="${d.t} map. ${d.w}"><div id="ph" aria-hidden="true"></div></div>
+ <input id="seek" type="range" min="0" max="1000" value="0" aria-label="Position in the map, left to right"><div class="ctl"><button id="pp" class="main" aria-pressed="false">Play</button><button id="st">Stop</button></div>
+ <div class="read" aria-hidden="true"><div><span>Time </span><b id="rt"></b></div><div><span>Column </span><b id="rc"></b></div><div><span>Relative level </span><b id="rl"></b> <i class="bar"><i id="rb"></i></i></div><div><span>Note </span><b id="rn"></b></div></div></div>
+ <h2>Introduction</h2><p>${S.intro}</p><h2>Scientific context</h2><p>${S.ctx}</p><h2>What to listen for</h2><p>${summary(d.id)} ${d.map}.</p>
+ <h2>Key observations</h2><ul>${S.obs.map(o=>`<li>${o}</li>`).join("")}</ul>
+ <h2>How the sound is made</h2><p>The map is read in 128 columns from west to east. Each column becomes one note on a minor pentatonic scale. Places where the picture changes a lot from top to bottom sound brighter. Levels are relative to this one image and are not measurements in degrees or other units.</p>
+ <p style="font-size:.9rem"><b>Source:</b> ${d.src}. ${d.sub}. Credit line to be confirmed from the original NASA page.</p>
+ <p><a class="btn" href="#studio/${d.id}">Open in Jukebox Studio</a> <a href="#stories/${nx.id}" style="margin-left:12px">Next story: ${nx.t}</a></p></article>`;
+ $("#pp").onclick=()=>{Eng.playing?Eng.pause():Eng.play();UI.state()};$("#st").onclick=()=>{Eng.stop();UI.state()};
+ $("#seek").oninput=e=>{Eng.pos=e.target.value/1000;Eng.sound(Eng.pos,Eng.playing);UI.draw();UI.state()};UI.draw();UI.state();$("#kh").focus({preventScroll:true});scrollTo(0,0)}
 /* ---------- pages ---------- */
 const FEAT=[["temperature","The Warming Planet","Hear how heat is spread across the globe."],["sst","The Changing Oceans","Warm tropics, cold poles, in sound."],["ice","The Disappearing Ice","Antarctic sea ice, edge to edge."],["forest","The Living Forests","Canopy green, sweeping across continents."]];
 const PAGES={
@@ -214,16 +255,16 @@ const PAGES={
   <div><a class="btn" href="#studio">Enter the Jukebox</a><a class="btn alt" href="#about">How it works</a></div><p class="cr">Image: NASA GMAO near-surface temperature model.</p></section>
  <div class="wrap"><h2>Most Earth science is shown only as pictures.</h2><p style="max-width:40rem">People who are blind or have low vision are left out of that story. Sonification turns the same observations into sound, so everyone can explore them, and sighted listeners often notice patterns they would have missed.</p>
   <div class="steps"><div><h3>1. Pick a map</h3><p>Choose a NASA Earth visualization: temperature, ocean, ice or forest.</p></div><div><h3>2. We read the colours</h3><p>Each column of the picture becomes a number that tracks warm, bright or green.</p></div><div><h3>3. Numbers become notes</h3><p>Higher values give higher pitch. A moving line shows where you are on the map.</p></div></div></div>
- <div class="feat">${FEAT.map(f=>`<a href="#studio/${f[0]}" style="background-image:url(${IMG(f[0])})"><span><b>${f[1]}</b>${f[2]}</span></a>`).join("")}</div>
+ <div class="feat">${FEAT.map(f=>`<a href="#stories/${({temperature:"warming",sst:"oceans",ice:"ice",forest:"forests"})[f[0]]}" style="background-image:url(${IMG(f[0])})"><span><b>${f[1]}</b>${f[2]}</span></a>`).join("")}</div>
  <div class="wrap"><h2>Honest about the data</h2><div class="note">The files supplied for this project are rendered images, not raw measurements. Every sound here is therefore labelled <b>image-derived</b>: it follows the colours of the picture, not original scientific values.</div></div>`,
  about:()=>`<div class="wrap" style="max-width:48rem"><h1>About Earth Jukebox</h1>
   <h2>Method</h2><p>Each image is split into 128 vertical columns. For each column we average one colour metric over valid pixels: warmth (red minus blue, ignoring grey and white), brightness, or green. We fill gaps by interpolation, smooth with a 3-point average and scale to 0 to 100% within that image. Levels map to a minor pentatonic scale (A2 to A5). Variation within a column sets the filter brightness and a shimmer layer. Sound is made live with the Web Audio API; no audio recordings are used. The analysis script is in <code>tools/analyze.py</code> and is reproducible.</p>
   <h2>Limitations</h2><p>Levels are relative to one image and carry no units. Colour maps differ between images. The pitch mapping is artistic.</p>
   <h2>Sources</h2><p>Imagery from NASA Earth Information Center / Scientific Visualization Studio renders (GMAO, MUR SST, Worldview, GEDI). Full inventory: <code>docs/RESOURCE_INVENTORY.md</code>.</p></div>`};
-function route(){const [r,id]=location.hash.slice(1).split("/");const k=PAGES[r]||r==="studio"||r==="kids"?r:"home";
+function route(){const [r,id]=location.hash.slice(1).split("/");const k=PAGES[r]||r==="studio"||r==="kids"||r==="stories"?r:"home";
  document.querySelectorAll("nav a").forEach(a=>a.toggleAttribute("aria-current",a.dataset.r===k)||a.removeAttribute("aria-current"));
  document.querySelectorAll("nav a").forEach(a=>a.dataset.r===k?a.setAttribute("aria-current","page"):a.removeAttribute("aria-current"));
- if(k==="studio")studio(id);else{Eng.playing&&Eng.pause();cancelAnimationFrame(UI.raf);k==="kids"?kids():$("#main").innerHTML=PAGES[k]()}
+ if(k==="studio")studio(id);else{Eng.playing&&Eng.pause();cancelAnimationFrame(UI.raf);k==="kids"?kids():k==="stories"?stories(id):$("#main").innerHTML=PAGES[k]()}
  document.title=(k==="studio"?"Jukebox Studio":k[0].toUpperCase()+k.slice(1))+" · Earth Jukebox";scrollTo(0,0)}
 $("#bigf").onclick=e=>{const o=document.body.classList.toggle("big");e.target.setAttribute("aria-pressed",o)};
 $("#hic").onclick=e=>{const o=document.body.classList.toggle("contrast");e.target.setAttribute("aria-pressed",o)};
